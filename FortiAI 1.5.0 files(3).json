@@ -1,0 +1,322 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "version": "1.5.0",
+        "title": "FortiAI API Documentation"
+    },
+    "servers": [
+        {
+            "url": "\/api\/v1"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "UploadSuccess": {
+                "type": "object",
+                "properties": {
+                    "submit_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "submission id"
+                    }
+                }
+            },
+            "ManualUpload": {
+                "type": "object",
+                "required": [
+                    "file_name",
+                    "file_content"
+                ],
+                "properties": {
+                    "file_name": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Filename.Need to be base64 encoded"
+                    },
+                    "file_content": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "File content.Need to be base64 encoded"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "password for zip file.(Optional)"
+                    }
+                }
+            },
+            "GetFileIdsOk": {
+                "type": "object",
+                "properties": {
+                    "results": {
+                        "type": "object",
+                        "properties": {
+                            "fileids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "description": "File ids in one submission"
+                            },
+                            "total_fileids": {
+                                "type": "integer",
+                                "description": "Total number of file ids"
+                            }
+                        }
+                    }
+                }
+            },
+            "GetVerdictOk": {
+                "type": "object",
+                "properties": {
+                    "results": {
+                        "type": "object",
+                        "properties": {
+                            "file_id": {
+                                "type": "integer"
+                            },
+                            "virus_name": {
+                                "type": "string"
+                            },
+                            "md5": {
+                                "type": "string"
+                            },
+                            "file_size": {
+                                "type": "integer"
+                            },
+                            "source": {
+                                "type": "string",
+                                "description": "For file uploaded by API or GUI, source will be \u201cmanual upload\u201d, otherwise it will be an URL"
+                            },
+                            "severity": {
+                                "type": "string",
+                                "description": "Severity of the malicious file",
+                                "enum": [
+                                    "No Risk",
+                                    "Low",
+                                    "Medium",
+                                    "High",
+                                    "Critical"
+                                ]
+                            },
+                            "category": {
+                                "type": "string",
+                                "description": "Category of the malicious file",
+                                "enum": [
+                                    "Generic Attack",
+                                    "Downloader",
+                                    "Redirector",
+                                    "Dropper",
+                                    "Ransomware",
+                                    "Worm",
+                                    "PWS",
+                                    "Rootkit",
+                                    "Banking Trojan",
+                                    "Infostealer",
+                                    "Exploit",
+                                    "Clicker",
+                                    "Virus",
+                                    "Application",
+                                    "Multi",
+                                    "CoinMiner",
+                                    "DoS",
+                                    "BackDoor",
+                                    "WebShell",
+                                    "SEP",
+                                    "Proxy",
+                                    "Trojan",
+                                    "Phishing",
+                                    "Fileless",
+                                    "Wiper",
+                                    "Industroyer"
+                                ]
+                            },
+                            "create_date": {
+                                "type": "string",
+                                "description": "Date when the file has been accepted"
+                            },
+                            "confidence": {
+                                "type": "string",
+                                "enum": [
+                                    "Low",
+                                    "Medium",
+                                    "High",
+                                    "N\/A"
+                                ]
+                            },
+                            "file_type": {
+                                "type": "string",
+                                "enum": [
+                                    "PE",
+                                    "PDF",
+                                    "MSOFFICE",
+                                    "DEX",
+                                    "HTML",
+                                    "ELF",
+                                    "VBS",
+                                    "VBA",
+                                    "JS",
+                                    "PHP",
+                                    "Hangul Office",
+                                    "XML",
+                                    "POWERSHELL"
+                                ]
+                            },
+                            "victim_ip": {
+                                "type": "string",
+                                "format": "ipv4"
+                            },
+                            "attacker_ip": {
+                                "type": "string",
+                                "format": "ipv4"
+                            },
+                            "victim_port": {
+                                "type": "integer"
+                            },
+                            "attacker_port": {
+                                "type": "integer"
+                            },
+                            "engine_version": {
+                                "type": "number",
+                                "format": "float"
+                            },
+                            "kdb_version": {
+                                "type": "number",
+                                "format": "float"
+                            },
+                            "tmfc": {
+                                "type": "integer",
+                                "description": "Reserved"
+                            },
+                            "pbit": {
+                                "type": "integer",
+                                "description": "Debug only"
+                            },
+                            "feature_composition": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "feature_type": {
+                                            "type": "string"
+                                        },
+                                        "appearance_in_sample": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "GetResultError": {
+                "type": "object",
+                "properties": {
+                    "http_code": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Internal Error Messages",
+                        "enum": [
+                            "DATA_NOT_EXIST",
+                            "DATA_IN_PROCESS",
+                            "INVALID_PARAM_NUMBER",
+                            "INVALID_PARAM",
+                            "SYSTEM_ERROR"
+                        ]
+                    }
+                }
+            },
+            "GetReportOk": {
+                "type": "object",
+                "properties": {
+                    "results": {
+                        "type": "object",
+                        "description": "Stix2 report content"
+                    }
+                }
+            },
+            "GetReportError": {
+                "type": "object",
+                "properties": {
+                    "http_code": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Internal Error Messages",
+                        "enum": [
+                            "DATA_NOT_EXIST",
+                            "INVALID_PARAM_NUMBER",
+                            "INVALID_PARAM",
+                            "SYSTEM_ERROR"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "files"
+        }
+    ],
+    "paths": {
+        "\/files": {
+            "post": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "Submitting files to Express File Analysis",
+                "description": "File types supported: HTML, PDF, JS, VBS, VBA, ELF, HWP (Hancom), PE, MSOFFICE, DEX, PHP, XML, POWERSHELL. Archive formats supported: ZIP, TAR, XZ, GZIP, BZIP, BZIP2, RAR, LZH, LZW, ARJ, CAB and 7Z",
+                "operationId": "submitfilesjson",
+                "requestBody": {
+                    "description": "Request body contains file data",
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ManualUpload"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK: API request successful",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UploadSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing authentication token or administrator is missing access profile permissions"
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource"
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource"
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large"
+                    },
+                    "424": {
+                        "description": "Failed Dependency"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    }
+}
